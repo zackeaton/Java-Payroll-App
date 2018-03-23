@@ -5,203 +5,116 @@
  */
 package pkg3816asg1;
 
-import java.text.ParseException;
 import java.util.Scanner;
+import java.io.Serializable;
+import java.text.DecimalFormat;
 
 /**
  *
  * @author zack
  */
-    // Fig. 10.4: Employee.java
-    // Employee abstract superclass.
+public abstract class Employee implements Serializable 
+{
 
+    static Scanner sc = new Scanner(System.in);
+    double units;
+    double unitrate;
+    String roll;
+    double hours;
+    double overTimeHour;
+    double rate;
+    String name;
+    double gross;
+    double tax = .20;
+    double net;
+    double taxrate = .20;
+    double netpercent;
+    String accountName;
 
-
-   public abstract class Employee
-   {
-      private String firstName;
-      private String lastName;
-      private String ssn;
-      
-    /**
-     *
-     */
-    public String accountName;
-
-
-      // three-argument constructor
-      public Employee( String first, String last, String ssn )
-      {
-          
-          
-        float rate=30.0f;
-	float taxrate=0.2f;
-	int hours=40;
-	float gross=0.0f;
-	float tax=0.0f;
-	float net=0.0f;
-	float net_percent=0.0f;
-          
-         firstName = first;
-         lastName = last;
-
-      } // end three-argument Employee constructor
-
-      // set first name
-      public void setFirstName( String first )
-      {
-         firstName = first; // should validate
-      } // end method setFirstName
-
-      // return first name
-      public String getFirstName()
-      {
-         return firstName;
-      } // end method getFirstName
-
-      // set last name
-      public void setLastName( String last )
-      {
-         lastName = last; // should validate
-      } // end method setLastName
-
-      // return last name
-      public String getLastName()
-      {
-         return lastName;
-      } // end method getLastName
-
-      // set social security number
-      
-      // return String representation of Employee object
-      @Override
-      public String toString()
-      {
-         return String.format( "%s %s\nsocial security number: %s",
-            getFirstName(), getLastName() );      } // end method toString
-
-      // abstract method overridden by concrete subclasses        
-      public abstract double earnings(); // no implementation here
-      
-      
-   //} // end abstract class Employee
-
-public void transMenu() throws ParseException
+    public void setName()
     {
-        Scanner sc = new Scanner(System.in);
-        
-        int input = 0;
+        System.out.println("Enter name:");
+        name = sc.next();
+    }
 
-        while (input != 4) 
-        {
-         System.out.print("========================\n"
-							 +"EMPLOYEE PAYROLL Menu: \n \n"
-							 + "1. HOURLY EMPLOYEE \n"
-							 + "2. SALARY EMPLOYEE \n"
-							 + "3. COMMISSION EMPLOYEE\n"
-							 + "4. EXIT\n"
-							 + "========================\n"
-							 + "\nEnter selection: ");
-            input = sc.nextInt();
+    public String getName() 
+    {
+        return name;
+    }
 
-            switch (input) //Switch Case for MENU
-            {
-                case 1: //HOURLY
-                {
-                   /// PROMPT HOURS
-                   
-                   // PROMPT RATE
-                   
-                   // CAL FOR TIME AND HALF
-                    
-                    break;
-                }
-                
-                case 2: //SALARY
-                {
-                    // PROMPT FOR STAFF OR EXCE
-                    
-                    //SET SALARY 50K and 100k
-                    
-                    break;
-                }
-                
-                case 3: //COMMISSION
-                {
-                   // PROMPT # ITEMS SOLD
-                   
-                   // PROPMPT UNIT PRICE
-                   
-                   //COMMISSION IS 50% OF GROSS SALES
-                    
-                    break;
-                }
-                
-                case 4: //Quit 
-               {
-                    break;
-
-                }
-            }//END SWITCH  
-            
-        }// END WHILE
-    }//CLOSE TRANS MENU
+    public void setRate() 
+    {
+        System.out.println("Enter pay rate:");
+        rate = sc.nextDouble();
 
     }
 
+    public void setHours() 
+    {
+        System.out.println("Enter hours worked this week:");
+        hours = sc.nextDouble();
+    }
+
+    public void setRoll() 
+    {
+        System.out.println("Set number for roll of Staff or Executive");
+        System.out.println("1) Staff");
+        System.out.println("2) Executive");
+
+        int input = sc.nextInt();
+
+        if (input == 1) {
+            hours = 1;
+            rate = 50000 / 52;
+        } else {
+            hours = 1;
+            rate = 100000 / 52;
+        }
+    }
+
+    public void setUnits() 
+    {
+        System.out.println("Enter number of units sold this week:");
+        units = sc.nextDouble();
+    }
+
+    public void setUnitrate() 
+    {
+        System.out.println("Enter unit rate:");
+        unitrate = sc.nextDouble();
+    }
+
+    public void computeGross() 
+    {
+        gross = rate * hours;
+    }
+
+    public void computeTax() 
+    {
+        tax = gross * taxrate;
+    }
+
+    public void computeNet() 
+    {
+        net = gross - tax;
+    }
+
+    public void computeNetPercent() 
+    {
+        netpercent = (net / gross) * 100;
+    }
+
+    protected void displayEmployee()
+    {
+        
+        System.out.println("Hours: " + hours);
+        System.out.println("Rate: " + rate);
+        System.out.println("Gross: $" + gross);
+        System.out.println("Tax: " + tax);
+        System.out.println("Taxrate: " + taxrate);
+        System.out.println("Net: $" + net);
+        System.out.println("Net%: $" + netpercent + "%");
+    }
 
 
-/////
-//////////
-//////////    /*********************
-//////////	     Attributes
-//////////	*********************/
-//////////
-//////////	//End Attributes
-//////////        
-//////////        /********************
-//////////	     Constructors
-//////////	********************/
-//////////        public Employee()
-//////////        {
-//////////            
-//////////        }
-//////////        	
-//////////	/********************
-//////////	     Methods
-//////////	********************/
-//////////        public void menu()
-//////////        {
-//////////            
-//////////        }
-//////////         
-//////////	public void computeGross()
-//////////        	{ 
-//////////		gross=rate*hours;
-//////////	}
-//////////
-//////////	protected void computeTax() 
-//////////{ 
-//////////		tax=gross*taxrate;
-//////////	}
-//////////
-//////////	protected void computeNet()
-////////// { 
-//////////		net=gross-tax;
-//////////	}
-//////////
-//////////	protected void computeNetperc() 
-//////////{ 
-//////////		net_percent=(net/gross)*100;
-//////////	}
-//////////	
-//////////	protected void displayEmployee() 
-//////////{
-//////////		System.out.println("Hours: " + new Integer(hours));
-//////////		System.out.println("Rate: " + new Float(rate));
-//////////		System.out.println("Gross: " + new Float(gross));
-//////////		System.out.println("Net: " + new Float(net));
-//////////		System.out.println("Net%: " + new Float(net_percent) + "%");
-//////////	}
-//////////} 	
-//////////
+}

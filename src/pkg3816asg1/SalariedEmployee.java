@@ -5,54 +5,44 @@
  */
 package pkg3816asg1;
 
+import java.io.Serializable;
+
 /**
  *
  * @author zack
  */
-// Fig. 10.5: SalariedEmployee.java
-    // SalariedEmployee concrete class extends abstract class Employee.
- 
-    public class SalariedEmployee extends Employee
+public class SalariedEmployee extends Employee implements Serializable 
+{
+    @Override
+    public void computeGross() 
     {
-       private double weeklySalary;
- 
-       // four-argument constructor
-       public SalariedEmployee( String first, String last, String ssn,
-               double salary )
-      {
-         super( first, last, ssn ); // pass to Employee constructor
-         setWeeklySalary( salary ); // validate and store salary
-      } // end four-argument SalariedEmployee constructor
+        gross = rate;
+    }
 
-      // set salary
-      public void setWeeklySalary( double salary )
-      {
-           double baseSalary;
-         if ( salary >= 0.0 )
-            baseSalary = salary;
-         else
-            throw new IllegalArgumentException(
-               "Weekly salary must be >= 0.0" );
-      } // end method setWeeklySalary
+    @Override
+    public void computeTax() 
+    {
+        tax = gross * taxrate;
+    }
 
-      // return salary
-      public double getWeeklySalary()
-      {
-         return weeklySalary;
-      } // end method getWeeklySalary
+    public void computeNet() 
+    {
+        net = gross - tax;
+    }
 
-      // calculate earnings; override abstract method earnings in Employee
-      public double earnings()                                            
-      {
-           return getWeeklySalary();                                        
-      } // end method earnings                                            
+    public void computeNetPercent() 
+    {
+        netpercent = (net / gross) * 100;
+    }
 
-      // return String representation of SalariedEmployee object   
-      @Override                                                    
-      public String toString()                                     
- {
+    public void displayEmployee() 
+    {   
+        System.out.println("Your Weekly Salary is: $" + rate);
+        System.out.println("Gross: $" + gross);
+        System.out.println("Tax: " + tax);
+        System.out.println("Taxrate: " + taxrate);
+        System.out.println("Net: $" + net);
+        System.out.println("Net%: " + netpercent + "%");
+    }
 
-      return String.format( "salaried employee: %s\n%s: $%,.2f",
-      super.toString(), "weekly salary" , getWeeklySalary() );
-      } // end method toString                                     
-   } // end class SalariedEmployee
+}

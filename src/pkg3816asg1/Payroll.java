@@ -5,82 +5,227 @@
  */
 package pkg3816asg1;
 
-import java.util.MissingFormatArgumentException;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.text.ParseException;
 import java.util.Scanner;
 
 /**
  *
- * @author zack
- */ 
-// Fig. 10.9: PayrollSystemTest.java
-    // Employee hierarchy test program.
-    public class Payroll
+ * @author zack + miguel
+ */
+public class Payroll implements Serializable 
+{
+
+    private Employee[] myAcct = new Employee[3];
+
+    public static void main(String[] args) throws ParseException, IOException 
     {
-       public static void main( String[] args )
-       {
-         // create subclass objects                                          
-          SalariedEmployee salariedEmployee =                                 
-         new SalariedEmployee(  "John",  "Smith" ,  "111-11-1111", 800.00 );
-         HourlyEmployee hourlyEmployee =                                     
-         new HourlyEmployee( "Karen", "Price" ,  "222-22-2222", 16.75, 40 );
-         CommissionEmployee commissionEmployee =                             
-         new CommissionEmployee(                                          
-         "Sue",  "Jones", "333-33-3333", 10000, .06 );
-         BasePlusCommissionEmployee basePlusCommissionEmployee =             
-         new BasePlusCommissionEmployee(                                  
-            "Bob", "Lewis", "444-44-4444", 5000, .04, 300 );                 
+        Scanner sc = new Scanner(System.in);
 
-         System.out.println( "Employees processed individually:\n" );
+        Payroll pr = new Payroll();
 
-        System.out.printf( "%s\n%s: $%,.2f\n\n",
-            salariedEmployee, "earned", salariedEmployee.earnings() );
-         System.out.printf( "%s\n%s: $%,.2f\n\n",
-            hourlyEmployee, "earned", hourlyEmployee.earnings() );
-         System.out.printf( "%s\n%s: $%,.2f\n\n",
-            commissionEmployee, "earned", commissionEmployee.earnings() );
-        System.out.printf( "%s\n%s: $%,.2f\n\n",
-            basePlusCommissionEmployee,
-            "earned", basePlusCommissionEmployee.earnings() );
+        int input = 0;
 
-         // create four-element Employee array
-         Employee[] employees = new Employee[  4 ];
+        do 
+        {
 
-         // initialize array with Employees
-         employees[ 0 ] = salariedEmployee;          
-        employees[ 1 ] = hourlyEmployee;            
-        employees[ 2 ] = commissionEmployee;        
-         employees[ 3 ] = basePlusCommissionEmployee;
+            System.out.print("========================\n"
+                    + "EMPLOYEE PAYROLL Menu: \n \n"
+                    + "1. POPULATE EMPLOYEE\n"
+                    + "2. SELECT EMPLOYEE\n"
+                    + "3. SAVE EMPLOYEE\n"
+                    + "4. LOAD EMPLOYEE\n"
+                    + "5. EXIT\n"
+                    + "========================\n"
+                    + "\nEnter selection: ");
+            input = sc.nextInt();
 
-         System.out.println( "Employees processed polymorphically:\n" );
-
-         // generically process each element in array employees
-        for ( Employee currentEmployee : employees )
-         {
-            System.out.println( currentEmployee ); // invokes toString
-
-            // determine whether element is a BasePlusCommissionEmployee
-            if ( currentEmployee instanceof BasePlusCommissionEmployee )
-                
+            switch (input)
             {
-               // downcast Employee reference to
-               // BasePlusCommissionEmployee reference
-               BasePlusCommissionEmployee employee =
-                  ( BasePlusCommissionEmployee ) currentEmployee;
+                case 1: 
+                {
+                    pr.populateAccts();
+                    break;
+                }
+                case 2: 
+                {
+                    pr.selectAcct();
+                    break;
+                }
+                case 3: 
+                {
+                    pr.saveAcct();
+                    break;
+                }
+                case 4: 
+                {
+                    pr.loadAcct();
+                    break;
 
-               employee.setBaseSalary( 1.10 * employee.getBaseSalary() );
+                }
+                case 5: 
+                {
+                    break;
 
-              System.out.printf(
-                  "new base salary with 10%% increase is: $%,.2f\n",
-                  employee.getBaseSalary() );
-            } // end if
+                }
+            }
 
-            System.out.printf(
-               "earned $%,.2f\n\n", currentEmployee.earnings() );
-         } // end for
+        } 
+        while (input != 5);
+    }
 
-         // get type name of each object in employees array
-         for ( int j = 0; j < employees.length; j++ )      
-            System.out.printf(  "Employee %d is a %s\n", j,
-               employees[ j ].getClass().getName() );      
-     } // end main
-   } // end class PayrollSystemTest
+    public void populateAccts() throws ParseException, IOException 
+    {
+        System.out.println("POPULATE");
+        for (int i = 0; i < 3; i++) 
+        {
+            Scanner sc = new Scanner(System.in);
+
+            System.out.println("What type of Employee is Employee #" + " " + (i + 1));
+            System.out.println("\n1) Hourly");
+            System.out.println("2) Salary");
+            System.out.println("3) Commission");
+            int input = sc.nextInt();
+
+            switch (input) 
+            {
+                case 1: 
+                {
+                    myAcct[i] = new HourlyEmployee();
+
+                    myAcct[i].setName();
+                    myAcct[i].setRate();
+                    myAcct[i].setHours();
+                    myAcct[i].computeGross();
+                    myAcct[i].computeTax();
+                    myAcct[i].computeNet();
+                    myAcct[i].computeNetPercent();
+                    myAcct[i].displayEmployee();
+
+                    break;
+                }
+                case 2: 
+                {
+                    myAcct[i] = new SalariedEmployee();
+
+                    myAcct[i].setName();
+                    myAcct[i].setRoll();
+                    myAcct[i].computeGross();
+                    myAcct[i].computeTax();
+                    myAcct[i].computeNet();
+                    myAcct[i].computeNetPercent();
+                    myAcct[i].displayEmployee();
+
+                    break;
+                }
+                case 3: 
+                {
+                    myAcct[i] = new CommissionEmployee();
+
+                    myAcct[i].setName();
+                    myAcct[i].setUnits();
+                    myAcct[i].setUnitrate();
+                    myAcct[i].computeGross();
+                    myAcct[i].computeTax();
+                    myAcct[i].computeNet();
+                    myAcct[i].computeNetPercent();
+                    myAcct[i].displayEmployee();
+
+                    break;
+                }
+                case 4: 
+                {
+                    break;
+
+                }
+            }
+
+        }
+        selectAcct();
+
+    }
+
+    public void selectAcct() throws ParseException, IOException 
+    {
+        String input1;
+        do 
+        {
+
+            Scanner sc = new Scanner(System.in);
+            int input;
+
+            System.out.println("Please choose one of the Following account");
+
+            for (int i = 0; i < 3; i++) 
+            {
+                System.out.println((i + 1) + ")" + "" + myAcct[i].getName());
+            }
+
+            input = sc.nextInt();
+            myAcct[input - 1].displayEmployee();
+
+            System.out.println("Enter 'Y' to choose a differnt employee or 'N' to Exit");
+            input1 = sc.next();
+
+        } 
+        while (input1.equalsIgnoreCase("y"));
+
+        Scanner sc = new Scanner(System.in);
+
+        System.out.println("Do you want to Save employee (Y/N)? ");
+        String input2 = sc.next();
+
+        if (input2.equalsIgnoreCase("y")) 
+        {
+            saveAcct();
+        } 
+        else 
+        {
+
+        }
+    }
+
+    public void saveAcct() throws IOException 
+    {
+
+        try 
+        {
+            FileOutputStream fos = new FileOutputStream("payroll.txt");
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+
+            oos.writeObject(myAcct);
+            oos.flush();
+            fos.close();
+        } 
+        catch (Throwable e) 
+        {
+            System.err.println(e);
+        }
+        System.out.println("Accounts have been saved");
+    }
+
+    public void loadAcct() throws ParseException, IOException 
+    {
+            Scanner sc = new Scanner(System.in);
+
+        try 
+        {
+            FileInputStream fis = new FileInputStream("payroll.txt");
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            myAcct = (Employee[]) ois.readObject();
+            fis.close();
+        } 
+        catch (Throwable e) 
+        {
+            System.err.println(e);
+        }
+    }
+
+}
+
+
